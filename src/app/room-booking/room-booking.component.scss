@@ -1,0 +1,126 @@
+main {
+  .tabs {
+    margin: 12px;
+    button {
+      font-size: 16px;
+      border: none;
+      padding: 12px 12px 5px 12px;
+      margin: 0px 15px;
+      background-color: transparent;
+      &.active {
+        color: #6a6aca;
+        font-weight: 500;
+        border-bottom: 2px solid #6a6aca;
+      }
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+  .tab-panel {
+    .add-guest {
+      border: 2px dashed #6a6aca;
+      border-radius: 15px;
+      text-align: center;
+      padding: 30px;
+      margin: 35px;
+    }
+    ul.guest-list {
+      list-style-type: none;
+      margin: 50px 15px;
+      li {
+        width: 90%;
+        border-radius: 5px;
+        padding: 22px;
+        margin-bottom: 15px;
+        box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%),
+          0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
+        &:hover {
+          box-shadow: 5px 10px 18px lightgrey;
+        }
+        span {
+          display: block;
+          padding: 3px;
+          &.address{
+              display: inline-block;
+          }
+          b{
+              color: #333;
+              .name{
+                font-size: 18px;
+              }
+            
+          }
+          &.blue{
+              color: #6a6aca;
+          }
+          &.address{
+              color: #333;
+          }
+        }
+      }
+    }
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+    form {
+      .form-group {
+        padding: 15px 20px 15px 50px;
+        label {
+          display: block;
+          padding: 10px 0px 8px;
+          color: #6a6aca;
+          font-size: 15px;
+        }
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        input[type="email"] {
+          width: 60%;
+          padding: 6px;
+          border-width: 1px;
+          border-radius: 5px;
+        }
+        ul.radiobuttons {
+          list-style-type: none;
+          margin: 0;
+          padding-left: 8px;
+          li {
+            display: inline-block;
+            padding-right: 12px;
+            label {
+              display: inline-block;
+              margin: 0px;
+              padding: 0px 7px;
+              color: #333;
+            }
+            input[type="radio"] {
+              display: inline-block;
+              width: auto;
+              margin: 0px;
+              padding: 0px;
+            }
+          }
+        }
+        .checkboxes {
+          label {
+            color: #333;
+            display: inline-flex;
+            align-items: center;
+            margin-right: 8px;
+            cursor: pointer;
+          }
+          input[type="checkbox"] {
+            margin-right: 8px;
+          }
+        }
+        .error {
+          color: #ff0000;
+          padding-top: 5px;
+        }
+      }
+    }
+  }
+}

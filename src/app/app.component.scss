@@ -1,0 +1,32 @@
+header {
+  background-color: #00008b;
+  .container {
+    max-width: 100%;
+    h1 {
+      margin: 12px 0px 12px 12px;
+      font-weight: 100;
+      color: #ffff;
+    }
+    nav {
+        &:last-child{
+            margin-left: auto;
+        }
+      ul {
+        list-style-type: none;
+        li {
+          display: inline-block;
+          padding: 10px;
+          a {
+            color: #fff;
+            text-decoration: none;
+          }
+          &.active {
+            a {
+              border-bottom: 2px solid #fff;
+            }
+          }
+        }
+      }
+    }
+  }
+}

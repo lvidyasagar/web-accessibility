@@ -1,0 +1,13 @@
+<div class="dialog" role="dialog" id="guest-dialog" aria-labelledby="guest_dilog" [attr.aria-modal]="display"
+  *ngIf="display" (blur)="closeDialogCall()">
+  <div class="dialog-content">
+    <div class="dialog-header">
+      <span class="icon" tabindex="0" (click)="closeDialogCall()">X</span>
+      <h2 class="">{{header}}</h2>
+    </div>
+    <div class="dialog-main">
+      <ng-content></ng-content>
+    </div>
+
+  </div>
+</div>

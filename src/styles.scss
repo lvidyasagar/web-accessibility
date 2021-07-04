@@ -1,1 +1,32 @@
 /* You can add global styles to this file, and also import other style files */
+body{
+    margin: 0;
+    padding: 0;
+}
+.btn{
+    color: #fff;
+    background-color: #00008b;
+    border-color: transparent;
+    padding: 12px 20px;
+    border-radius: 5px;
+    border-width: 1px;
+    cursor: pointer;
+    &:focus-visible{
+        outline: 2px solid black;
+    }
+}
+.btn.next{
+    float: right;
+    margin-right: 20px;
+}
+.btn.previous{
+    margin-left: 20px;
+}
+.btn:disabled{
+    opacity: 0.5;
+}
+input[type="number"].hide-arrows{
+    &::-webkit-outer-spin-button,&::-webkit-inner-spin-button{
+        display: none;
+    }
+}
