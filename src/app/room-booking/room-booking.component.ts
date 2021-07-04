@@ -6,7 +6,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { CheckInDetails, Guest } from '../modal-dialog/models/guest';
+import { CheckInDetails, Guest } from '../models/guest';
 
 @Component({
   selector: 'app-room-booking',
