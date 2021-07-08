@@ -6,6 +6,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 import { CheckInDetails, Guest } from '../models/guest';
 
 @Component({
@@ -16,16 +17,19 @@ import { CheckInDetails, Guest } from '../models/guest';
 export class RoomBookingComponent implements OnInit {
   isGuestsTab = false;
   isPaymentTab = false;
-  submitted = false;
   isDialogOpen = false;
   heading = 'Guest info';
   checkInForm: FormGroup;
   guestForm: FormGroup;
-  gFormSubmitted = false;
+  paymentForm: FormGroup;
+  upiForm: FormGroup;
   guestList: Guest[] = [];
   checkInDetails: CheckInDetails;
+  paymentType = 'card';
+  paymentDialogConf = false;
+  aggreement = false;
 
-  constructor() {
+  constructor(private router: Router) {
     this.checkInForm = new FormGroup({
       checkin: new FormControl('', [
         Validators.required,
@@ -47,6 +51,7 @@ export class RoomBookingComponent implements OnInit {
       ),
       pickup: new FormControl('', Validators.required),
     });
+
     this.guestForm = new FormGroup({
       firstName: new FormControl('', Validators.required),
       lastName: new FormControl('', Validators.required),
@@ -58,6 +63,26 @@ export class RoomBookingComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       address: new FormControl('', Validators.required),
       age: new FormControl('', Validators.required),
+    });
+
+    this.paymentForm = new FormGroup({
+      cardHolderName: new FormControl('', Validators.required),
+      cardNumber: new FormControl('', [
+        Validators.required,
+        Validators.pattern('^[0-9]*$'),
+        Validators.minLength(16),
+        Validators.maxLength(16),
+      ]),
+      expirationDate: new FormControl('', Validators.required),
+      cvv: new FormControl('', [
+        Validators.required,
+        Validators.min(100),
+        Validators.max(999),
+      ]),
+    });
+
+    this.upiForm = new FormGroup({
+      upiAddress: new FormControl('', Validators.required),
     });
   }
 
@@ -94,6 +119,7 @@ export class RoomBookingComponent implements OnInit {
     } else {
       this.isPaymentTab = false;
       this.isGuestsTab = true;
+      this.heading = 'Guest info';
     }
   }
 
@@ -130,7 +156,6 @@ export class RoomBookingComponent implements OnInit {
   }
 
   saveDetails(): void {
-    this.submitted = true;
     if (this.checkInForm.valid) {
       this.checkInDetails = this.checkInForm.value;
       this.nextTab('stay');
@@ -142,9 +167,12 @@ export class RoomBookingComponent implements OnInit {
   }
 
   closeDialog(): void {
-    this.isDialogOpen = false;
-    this.guestForm.reset();
-    this.gFormSubmitted = false;
+    if (this.isDialogOpen) {
+      this.isDialogOpen = false;
+      this.guestForm.reset();
+    } else if (this.paymentDialogConf) {
+      this.paymentDialogConf = false;
+    }
   }
 
   get firstName(): AbstractControl | null {
@@ -170,12 +198,61 @@ export class RoomBookingComponent implements OnInit {
   }
 
   saveGuestDetails(): void {
-    this.gFormSubmitted = true;
     if (this.guestForm.valid) {
       this.guestList.push(this.guestForm.value);
       this.isDialogOpen = false;
-      this.gFormSubmitted = false;
       this.guestForm.reset();
     }
+  }
+
+  setPaymentType(payment: string): void {
+    this.paymentType = payment;
+  }
+
+  get cardHolderName(): AbstractControl | null {
+    return this.paymentForm.get('cardHolderName');
+  }
+  get cardNumber(): AbstractControl | null {
+    return this.paymentForm.get('cardNumber');
+  }
+  get expirationDate(): AbstractControl | null {
+    return this.paymentForm.get('expirationDate');
+  }
+  get cvv(): AbstractControl | null {
+    return this.paymentForm.get('cvv');
+  }
+
+  get upiAddress(): AbstractControl | null {
+    return this.upiForm.get('upiAddress');
+  }
+
+  processPayment(): void {
+    this.heading = 'Booking Confirmation';
+    if (this.paymentType === 'card') {
+      if (this.paymentForm.valid) {
+        this.paymentDialogConf = true;
+      }
+    } else {
+      if (this.upiForm.valid) {
+        this.paymentDialogConf = true;
+      }
+    }
+  }
+
+  checkAgrrement(value: boolean): void {
+    this.aggreement = value;
+  }
+
+  redirectToBookings(): void {
+    this.router.navigateByUrl('/bookings', {
+      state: {
+        checkInDetails: this.checkInDetails,
+        guests: this.guestList,
+        paymentInfo:
+          this.paymentType === 'card'
+            ? this.paymentForm.value
+            : this.upiForm.value,
+      },
+    });
   }
 }

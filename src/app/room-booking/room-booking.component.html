@@ -2,31 +2,32 @@
     <div class="tabs">
         <div class="" role="tablist" aria-label="Room Booking">
             <button [ngClass]="{'active': !isGuestsTab && !isPaymentTab}" role="tab"
-                [attr.aria-selected]="!isGuestsTab && !isPaymentTab" aria-controls="stay-tab" id="stay">
+                [attr.aria-selected]="!isGuestsTab && !isPaymentTab" aria-controls="stay-tab" id="stay"
+                tabindex="{{(!isGuestsTab && !isPaymentTab) && !isDialogOpen ? 0 : -1}}">
                 You're Stay</button>
             <button [ngClass]="{'active': isGuestsTab && !isPaymentTab}" role="tab"
                 [attr.aria-selected]="isGuestsTab && !isPaymentTab" aria-controls="guests-tab" id="guests"
-                tabindex="-1">Guests</button>
+                tabindex="{{(isGuestsTab && !isPaymentTab) && !isDialogOpen ? 0 : -1}}">Guests</button>
             <button [ngClass]="{'active': !isGuestsTab && isPaymentTab}" role="tab"
                 [attr.aria-selected]="!isGuestsTab && isPaymentTab" aria-controls="payment-tab" id="payment"
-                tabindex="-1">Payment</button>
+                tabindex="{{(!isGuestsTab && isPaymentTab)&& !isDialogOpen ? 0 : -1}}">Payment</button>
         </div>
     </div>
-    <div class="tab-panel" tabindex="0" role="tabpanel" id="stay-tab" aria-labelledby="stay"
-        *ngIf="!isGuestsTab && !isPaymentTab">
+    <div class="tab-panel" tabindex="{{!isDialogOpen ? 0 : -1 }}" role="tabpanel" id="stay-tab" aria-labelledby="stay"
+        *ngIf="!isGuestsTab && !isPaymentTab" hidden="{{!isGuestsTab && !isPaymentTab ? '':'hidden'}}">
         <form [formGroup]="checkInForm" novalidate (ngSubmit)="saveDetails()">
-            <div fxLayout="row wrap" fxLayout.xs="column wrap">
+            <div fxLayout="row wrap" fxLayout.xs="column wrap" aria-label="stay tab">
                 <div class="form-group" fxFlex="50">
                     <label for="check-in">Check In</label>
                     <input type="date" formControlName="checkin" name="check-in" id="check-in" required>
-                    <div class="error" *ngIf="submitted && checkin && checkin.errors">
+                    <div class="error" *ngIf="checkin && checkin.errors">
                         <span>Please select check-in date</span>
                     </div>
                 </div>
                 <div class="form-group" fxFlex="50">
                     <label for="check-out">Check Out</label>
                     <input type="date" formControlName="checkout" name="check-out" id="check-out" required>
-                    <div class="error" *ngIf="submitted && checkout && checkout.errors">
+                    <div class="error" *ngIf="checkout && checkout.errors">
                         <span *ngIf="checkout.errors.required">Please select check-out date</span>
                         <span *ngIf="checkout.errors && !checkout.errors.required">check-in date should be less than
                             check-out date</span>
@@ -34,9 +35,12 @@
                 </div>
                 <div class="form-group" fxFlex="50">
                     <label for="room-type">Room Type</label>
-                    <input type="text" formControlName="roomType" name="room-type" id="room-type"
-                        placeholder="Room Type " required>
-                    <div class="error" *ngIf="submitted && roomType && roomType.errors">
+                    <select formControlName="roomType" name="room-type" id="room-type" required>
+                        <option value=""></option>
+                        <option value="deluxe">Deluxe</option>
+                        <option value="nonDeluxe">Non-Deluxe</option>
+                    </select>
+                    <div class="error" *ngIf="roomType && roomType.errors">
                         <span>Please select room type</span>
                     </div>
                 </div>
@@ -44,7 +48,7 @@
                     <label for="persons">Persons</label>
                     <input type="number" formControlName="persons" min="1" name="persons" id="persons"
                         placeholder="Number of Persons" required>
-                    <div class="error" *ngIf="submitted && persons && persons.errors">
+                    <div class="error" *ngIf="persons && persons.errors">
                         <span>Please select number of persons for stay</span>
                     </div>
                 </div>
@@ -63,14 +67,14 @@
                             <input type="checkbox" formControlName="dinner">
                             Dinner
                         </label>
-                        <div class="error" *ngIf="submitted && checkInForm.controls['foodService'].errors">
+                        <div class="error" *ngIf="checkInForm.controls['foodService'].errors">
                             <span>Please select number of persons for stay</span>
                         </div>
                     </div>
                 </div>
-                <div class="form-group" fxFlex="100"  aria-labelledby="pick-up">
+                <div class="form-group" fxFlex="100">
                     <label id="pick-up">Pick-Up</label>
-                    <ul class="radiobuttons" role="radiogroup">
+                    <ul class="radiobuttons" aria-labelledby="pick-up">
                         <li>
                             <input type="radio" id="yes" value="yes" name="pickup" formControlName="pickup" required>
                             <label for="yes">Yes, Sure</label>
@@ -80,17 +84,17 @@
                             <label for="no">No, i already rented a car</label>
                         </li>
                     </ul>
-                    <div class="error" *ngIf="submitted && pickup && pickup.errors">
+                    <div class="error" *ngIf="pickup && pickup.errors">
                         <span>Please select pickup service type</span>
                     </div>
                 </div>
             </div>
-            <!--  -->
-            <button type="submit" [disabled]="submitted && !checkInForm.valid" class="btn next">Next</button>
+            <button type="submit" [disabled]="!checkInForm.valid" class="btn next">Next</button>
         </form>
     </div>
-    <div class="tab-panel" tabindex="0" role="tabpanel" id="guests-tab" aria-labelledby="guests"
-        *ngIf="isGuestsTab && !isPaymentTab">
+    <div class="tab-panel" tabindex="{{!isDialogOpen ? 0 : -1 }}" role="tabpanel" id="guests-tab"
+        aria-labelledby="guests" *ngIf="isGuestsTab && !isPaymentTab"
+        hidden="{{isGuestsTab && !isPaymentTab ? '':'hidden'}}">
         <ul *ngIf="guestList" class="guest-list">
             <li *ngFor="let user of guestList">
                 <span><b class="name">{{user.firstName+" "+user.lastName}}</b></span>
@@ -98,82 +102,182 @@
                 <span class="blue">Address : <span class="address">{{user.address}}</span></span>
             </li>
         </ul>
-        <p class="add-guest" *ngIf="guestList.length === 0">Add guest(s) to proceed</p>
+        <p class="add-guest" tabindex="0" *ngIf="guestList.length === 0" aria-label="add guests to proceed">Add guest(s)
+            to proceed</p>
         <div class="buttons">
-            <button class="btn previous" (click)="prevTab('guest')">Previous</button>
+            <button class="btn previous" (click)="prevTab('guest')">Back</button>
             <button class="btn" (click)="addGuest()">Add Guest</button>
-            <button class="btn next" (click)="nextTab('guest')">Next</button>
+            <button class="btn next" [disabled]="guestList.length < 1" (click)="nextTab('guest')">Next</button>
         </div>
-        <app-modal-dialog [header]="heading" [display]="isDialogOpen" (closeDialog)="closeDialog()">
+        <app-modal-dialog #modal [header]="heading" [display]="isDialogOpen" (closeDialog)="closeDialog()"
+            *ngIf="isDialogOpen">
             <form [formGroup]="guestForm" (ngSubmit)="saveGuestDetails()">
                 <div fxLayout="row wrap" fxLayout.xs="column wrap">
                     <div class="form-group" fxFlex="50">
                         <label for="firstName">First Name</label>
                         <input type="text" formControlName="firstName" name="firstName" id="firstName" required>
-                        <div class="error" *ngIf="gFormSubmitted && firstName && firstName.errors">
+                        <div class="error" *ngIf="firstName && firstName.errors">
                             <span>Please enter first name</span>
                         </div>
                     </div>
                     <div class="form-group" fxFlex="50">
                         <label for="lastName">Last Name</label>
                         <input type="text" formControlName="lastName" name="lastName" id="lastName" required>
-                        <div class="error" *ngIf="gFormSubmitted && lastName && lastName.errors">
+                        <div class="error" *ngIf="lastName && lastName.errors">
                             <span>Please enter last name</span>
                         </div>
                     </div>
-                    <div class="form-group" fxFlex="100"  aria-labelledby="gender">
+                    <div class="form-group" fxFlex="100" aria-labelledby="gender">
                         <label id="gender">Gender</label>
                         <ul class="radiobuttons">
                             <li>
-                                <input type="radio" id="male" value="male" name="gender" formControlName="gender" required>
+                                <input type="radio" id="male" value="male" name="gender" formControlName="gender"
+                                    required>
                                 <label for="male">Male</label>
                             </li>
                             <li>
-                                <input type="radio" id="female" value="female" name="gender" formControlName="gender" required>
+                                <input type="radio" id="female" value="female" name="gender" formControlName="gender"
+                                    required>
                                 <label for="female">Female</label>
                             </li>
                         </ul>
-                        <div class="error" *ngIf="gFormSubmitted && gender && gender.errors">
+                        <div class="error" *ngIf="gender && gender.errors">
                             <span>Please select gender</span>
                         </div>
                     </div>
                     <div class="form-group" fxFlex="50">
                         <label for="phone">Phone</label>
-                        <input type="number" class="hide-arrows" formControlName="phone" max="10" name="phone" id="phone" required>
-                        <div class="error" *ngIf="gFormSubmitted && phone && phone.errors">
+                        <input type="number" class="hide-arrows" formControlName="phone" max="10" name="phone"
+                            id="phone" required>
+                        <div class="error" *ngIf="phone && phone.errors">
                             <span>Please enter phone number</span>
                         </div>
                     </div>
                     <div class="form-group" fxFlex="50">
                         <label for="email">Email</label>
                         <input type="email" formControlName="email" name="email" id="email" required>
-                        <div class="error" *ngIf="gFormSubmitted && email && email.errors">
+                        <div class="error" *ngIf="email && email.errors">
                             <span>Please enter email address</span>
                         </div>
                     </div>
                     <div class="form-group" fxFlex="50">
                         <label for="address">Address</label>
-                        <textarea name="address"  formControlName="address" id="address" cols="20" rows="3"></textarea>
-                        <div class="error" *ngIf="gFormSubmitted && email && email.errors">
+                        <textarea name="address" formControlName="address" id="address" cols="20" rows="3"></textarea>
+                        <div class="error" *ngIf="email && email.errors">
                             <span>Please enter address</span>
                         </div>
                     </div>
                     <div class="form-group" fxFlex="50">
                         <label for="age">Age</label>
-                        <input type="number" class="hide-arrows" min="1" max="100" formControlName="age" name="age" id="age" required>
-                        <div class="error" *ngIf="gFormSubmitted && age && age.errors">
+                        <input type="number" class="hide-arrows" min="1" max="100" formControlName="age" name="age"
+                            id="age" required>
+                        <div class="error" *ngIf="age && age.errors">
                             <span>Please enter age</span>
                         </div>
                     </div>
+                    <div fxFlex="100">
+                        <button type="submit" [disabled]="!guestForm.valid" class="btn next">Save</button>
+                    </div>
                 </div>
-                <button type="submit" [disabled]="gFormSubmitted && !guestForm.valid" class="btn next">Save</button>
+
             </form>
         </app-modal-dialog>
     </div>
-    <div class="tab-panel" tabindex="0" role="tabpanel" id="payment-tab" aria-labelledby="payment"
-        *ngIf="isPaymentTab && !isGuestsTab">
-        <p>Payment</p>
-        <button class="btn previous" (click)="prevTab('payment')">Previous</button>
-        <button class="btn next">Payment</button>
+    <div class="tab-panel" tabindex="{{!isDialogOpen ? 0 : -1 }}" role="tabpanel" id="payment-tab"
+        aria-labelledby="payment" *ngIf="isPaymentTab && !isGuestsTab"
+        hidden="{{!isGuestsTab && isPaymentTab ? '':'hidden'}}">
+        <div class="form-group" aria-labelledby="payment_type">
+            <label id="payment_type">Choose Payment</label>
+            <ul class="radiobuttons">
+                <li>
+                    <input type="radio" id="credit-card" value="card" name="payment" [(ngModel)]="paymentType" required
+                        (change)="setPaymentType('card')">
+                    <label for="credit-card">Credit Card</label>
+                </li>
+                <li>
+                    <input type="radio" id="upi" value="upi" name="payment" [(ngModel)]="paymentType" required
+                        (change)="setPaymentType('upi')">
+                    <label for="upi">UPI Payment</label>
+                </li>
+            </ul>
+        </div>
+        <div *ngIf="paymentType ==='card'">
+            <form [formGroup]="paymentForm" (ngSubmit)="processPayment()">
+                <div fxLayout="row wrap" fxLayout.xs="column wrap">
+                    <div class="form-group" fxFlex="50">
+                        <label for="name">Card holder name</label>
+                        <input type="text" placeholder="Name" formControlName="cardHolderName" name="name" id="name"
+                            required>
+                        <div class="error" *ngIf="cardHolderName && cardHolderName.errors">
+                            <span>Please enter card holder name</span>
+                        </div>
+                    </div>
+                    <div class="form-group" fxFlex="50">
+                        <label for="card">Card number</label>
+                        <input type="text" class="hide-arrows" placeholder="0000-0000-0000-0000" minlength="16"
+                            maxlength="16" pattern="^[0-9]*$" formControlName="cardNumber" name="card" id="card"
+                            required>
+                        <div class="error" *ngIf="cardNumber && cardNumber.errors">
+                            <span *ngIf="cardNumber.errors?.required">Please enter card number</span>
+                            <span *ngIf="cardNumber.errors?.minlength || cardNumber.errors?.maxlength">Please enter 16
+                                digits of card number</span>
+                            <span *ngIf="cardNumber.errors?.pattern">Please enter only numerical digits for card
+                                number</span>
+                        </div>
+                    </div>
+                    <div class="form-group" fxFlex="50">
+                        <label for="expiration-date">Expiration Date</label>
+                        <input type="month" formControlName="expirationDate" name="expiration-date" id="expiration-date"
+                            required>
+                        <div class="error" *ngIf="expirationDate && expirationDate.errors">
+                            <span *ngIf="expirationDate.errors">Please select card expiry date</span>
+                        </div>
+                    </div>
+                    <div class="form-group" fxFlex="50">
+                        <label for="cvv">CVV</label>
+                        <input type="number" placeholder="000" class="hide-arrows" min="100" max="999"
+                            formControlName="cvv" name="cvv" id="cvv" required>
+                        <div class="error" *ngIf="cvv && cvv.errors">
+                            <span *ngIf="cvv.errors">Please enter CVV number</span>
+                            <span *ngIf="cvv.errors?.max || cvv.errors?.min ">Please enter 3 digits only for CVV
+                                number</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn previous" (click)="prevTab('payment')">Back</button>
+                <button type="submit" class="btn next">Proceed</button>
+            </form>
+        </div>
+        <div *ngIf="paymentType ==='upi'">
+            <form [formGroup]="upiForm" (ngSubmit)="processPayment()">
+                <div fxLayout="row wrap" fxLayout.xs="column wrap">
+                    <div class="form-group" fxFlex="50">
+                        <label for="upi-address">Enter UPI Address</label>
+                        <input type="text" placeholder="09876543@bank.io" formControlName="upiAddress"
+                            name="upi-address" id="upi-address" required>
+                        <div class="error" *ngIf="upiAddress && upiAddress.errors">
+                            <span>Please enter upi payment address</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn previous" (click)="prevTab('payment')">Back</button>
+                <button class="btn next" type="submit">Proceed</button>
+            </form>
+        </div>
+        <app-modal-dialog [header]="heading" [sHeading]="true" [display]="paymentDialogConf"
+            (closeDialog)="closeDialog()" *ngIf="paymentDialogConf">
+            <div class="payment-dialog-content" fxLayout="column wrap">
+                <h4>Our reception will approve your reservation in few days</h4>
+                <label for="aggreement">
+                    <input type="checkbox" name="aggreement" [(ngModel)]="aggreement" id="aggreement"
+                        (change)="checkAgrrement($event.target.checked)">
+                    I understand that reservation will be approved by hotel reception
+                </label>
+                <div class="payment-buttons">
+                    <button class="btn" [disabled]="!aggreement" (click)="redirectToBookings()">Ok</button>
+                    <button class="btn" (click)="closeDialog()">Cancel</button>
+                </div>
+            </div>
+        </app-modal-dialog>
     </div>
 </main>

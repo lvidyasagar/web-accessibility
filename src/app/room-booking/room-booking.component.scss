@@ -1,4 +1,5 @@
 main {
+    z-index: 1;
   .tabs {
     margin: 12px;
     button {
@@ -41,21 +42,20 @@ main {
         span {
           display: block;
           padding: 3px;
-          &.address{
-              display: inline-block;
+          &.address {
+            display: inline-block;
           }
-          b{
-              color: #333;
-              .name{
-                font-size: 18px;
-              }
-            
+          b {
+            color: #333;
+            .name {
+              font-size: 18px;
+            }
           }
-          &.blue{
-              color: #6a6aca;
+          &.blue {
+            color: #6a6aca;
           }
-          &.address{
-              color: #333;
+          &.address {
+            color: #333;
           }
         }
       }
@@ -65,61 +65,79 @@ main {
       justify-content: space-between;
       margin-bottom: 15px;
     }
-    form {
-      .form-group {
-        padding: 15px 20px 15px 50px;
-        label {
-          display: block;
-          padding: 10px 0px 8px;
-          color: #6a6aca;
-          font-size: 15px;
-        }
-        input[type="text"],
-        input[type="date"],
-        input[type="number"],
-        input[type="email"] {
-          width: 60%;
-          padding: 6px;
-          border-width: 1px;
-          border-radius: 5px;
-        }
-        ul.radiobuttons {
-          list-style-type: none;
-          margin: 0;
-          padding-left: 8px;
-          li {
-            display: inline-block;
-            padding-right: 12px;
-            label {
-              display: inline-block;
-              margin: 0px;
-              padding: 0px 7px;
-              color: #333;
-            }
-            input[type="radio"] {
-              display: inline-block;
-              width: auto;
-              margin: 0px;
-              padding: 0px;
-            }
-          }
-        }
-        .checkboxes {
+    .form-group {
+      padding: 15px 20px 15px 50px;
+      label {
+        display: block;
+        padding: 10px 0px 8px;
+        color: #6a6aca;
+        font-size: 15px;
+      }
+      input[type="text"],
+      input[type="date"],
+      input[type="number"],
+      input[type="email"],
+      input[type="month"],
+      select {
+        width: 60%;
+        padding: 6px;
+        border-width: 1px;
+        border-radius: 5px;
+      }
+      ul.radiobuttons {
+        list-style-type: none;
+        margin: 0;
+        padding-left: 8px;
+        li {
+          display: inline-block;
+          padding-right: 12px;
           label {
+            display: inline-block;
+            margin: 0px;
+            padding: 0px 7px;
             color: #333;
-            display: inline-flex;
-            align-items: center;
-            margin-right: 8px;
-            cursor: pointer;
           }
-          input[type="checkbox"] {
-            margin-right: 8px;
+          input[type="radio"] {
+            display: inline-block;
+            width: auto;
+            margin: 0px;
+            padding: 0px;
           }
         }
-        .error {
-          color: #ff0000;
-          padding-top: 5px;
+      }
+      .checkboxes {
+        label {
+          color: #333;
+          display: inline-flex;
+          align-items: center;
+          margin-right: 8px;
+          cursor: pointer;
         }
+        input[type="checkbox"] {
+          margin-right: 8px;
+        }
+      }
+      .error {
+        color: #e60909;
+        padding-top: 5px;
+      }
+    }
+  }
+  .payment-dialog-content {
+    text-align: center;
+    padding: 12px 0px;
+    h4 {
+      margin: 12px;
+    }
+    label {
+      color: #6a6aca;
+      margin-bottom: 15px;
+    }
+    .payment-buttons {
+      margin: 10px;
+      .btn {
+        float: right;
+        margin-left: 10px;
       }
     }
   }

@@ -1,6 +1,6 @@
 .dialog {
-  z-index: 3;
-  padding-top: 100px;
+  z-index: 9999;
+  padding-top: 60px;
   position: fixed;
   left: 0;
   top: 0;
@@ -13,33 +13,44 @@
     width: 50%;
     margin: 0 auto;
     margin-bottom: 200px;
-    border: 1px solid;
     border-radius: 5px;
     background-color: #ffff;
-    .dialog-header {
-      h2{
-        padding-left: 45px;
-      }
-      .icon {
-        position: absolute;
-        top: 0px;
-        right: 1px;
-        border: 1px solid;
-        background: aliceblue;
-        border-radius: 5px;
-        padding: 2px;
-        cursor: pointer;
+    .icon {
+      position: absolute;
+      top: 0px;
+      right: 1px;
+      border: 1px solid;
+      background: aliceblue;
+      border-radius: 5px;
+      padding: 2px;
+      cursor: pointer;
+    }
+    .dialog-highlight-header {
+      background-color: lightgray;
+      padding: 10px;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+      margin-top: -1px;
+      h3 {
+        margin: 0;
+        padding: 0;
       }
     }
-    .dialog-main{
-      margin-bottom: 50px;
+    .dialog-header {
+      padding: 1px;
+      h2 {
+        padding-left: 45px;
+      }
+    }
+    .dialog-main {
+      padding-bottom: 10px;
     }
   }
 }
 
-@media screen and (max-width:768px) {
-  .dialog{
-    .dialog-content{
+@media screen and (max-width: 768px) {
+  .dialog {
+    .dialog-content {
       width: 80%;
     }
   }

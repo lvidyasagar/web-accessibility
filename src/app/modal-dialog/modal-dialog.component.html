@@ -1,11 +1,12 @@
-<div class="dialog" role="dialog" id="guest-dialog" aria-labelledby="guest_dilog" [attr.aria-modal]="display"
+<div class="dialog" role="dialog" id="guest-dialog" aria-labelledby="guest_dialog" [attr.aria-modal]="display"
   *ngIf="display" (blur)="closeDialogCall()">
-  <div class="dialog-content">
-    <div class="dialog-header">
+  <div class="dialog-content" >
+    <div [ngClass]="sHeading ? 'dialog-highlight-header':'dialog-header'">
       <span class="icon" tabindex="0" (click)="closeDialogCall()">X</span>
-      <h2 class="">{{header}}</h2>
+      <h2 *ngIf="!sHeading" >{{header}}</h2>
+      <h3 *ngIf="sHeading">{{header}}</h3>
     </div>
-    <div class="dialog-main">
+    <div class="dialog-main" id="guest_dialog">
       <ng-content></ng-content>
     </div>
 
