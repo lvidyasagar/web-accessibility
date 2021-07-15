@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -28,6 +28,7 @@ export class RoomBookingComponent implements OnInit {
   paymentType = 'card';
   paymentDialogConf = false;
   aggreement = false;
+  @ViewChild('guest_list') guestlist:ElementRef;
 
   constructor(private router: Router) {
     this.checkInForm = new FormGroup({
@@ -170,6 +171,7 @@ export class RoomBookingComponent implements OnInit {
     if (this.isDialogOpen) {
       this.isDialogOpen = false;
       this.guestForm.reset();
+      this.guestlist.nativeElement.focus();
     } else if (this.paymentDialogConf) {
       this.paymentDialogConf = false;
     }
@@ -202,6 +204,7 @@ export class RoomBookingComponent implements OnInit {
       this.guestList.push(this.guestForm.value);
       this.isDialogOpen = false;
       this.guestForm.reset();
+      this.guestlist.nativeElement.focus();
     }
   }
 
