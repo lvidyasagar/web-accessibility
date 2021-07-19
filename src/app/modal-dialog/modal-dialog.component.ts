@@ -19,7 +19,7 @@ export class ModalDialogComponent implements OnInit {
   @Input() sHeading: boolean;
   @Output() closeDialog = new EventEmitter<boolean>();
 
-  constructor(private elementRef: ElementRef) {}
+  constructor(private elementRef: ElementRef) { }
 
   ngOnInit(): void {
     if (this.display) {
@@ -29,8 +29,14 @@ export class ModalDialogComponent implements OnInit {
     }
   }
 
-  closeDialogCall(): void {
-    this.closeDialog.emit(false);
+  closeDialogCall(event?): void {
+    if (
+      event === 'click' ||
+      (event && event.keyCode === 32) ||
+      event.keyCode === 13
+    ) {
+      this.closeDialog.emit(false);
+    }
   }
 
   handleTabKey(e, modelId: string, nativeElement, tagsList: string): void {
@@ -60,7 +66,7 @@ export class ModalDialogComponent implements OnInit {
         }
       }
     } else if (e.keyCode === 27) {
-      this.closeDialogCall();
+      this.closeDialogCall('click');
     }
   }
 
@@ -70,7 +76,7 @@ export class ModalDialogComponent implements OnInit {
       event,
       '#guest_dialog',
       this.elementRef.nativeElement,
-      'input,button,select,textarea,a,[tabindex]:not([tabindex="-1"])'
+      'input,button,select,textarea,a,[tabindex]:not([tabindex="-1"]),span.icon'
     );
   }
 }

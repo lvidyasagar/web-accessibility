@@ -28,7 +28,7 @@ export class RoomBookingComponent implements OnInit {
   paymentType = 'card';
   paymentDialogConf = false;
   aggreement = false;
-  @ViewChild('guest_list') guestlist:ElementRef;
+  @ViewChild('guest_list') guestlist: ElementRef;
 
   constructor(private router: Router) {
     this.checkInForm = new FormGroup({
